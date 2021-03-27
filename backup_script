@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#Before running backup script, create a folder ~/Backup and file ~/Backup/backup_files
+
+exec 0< ~/Backup/backup_files
+
+while read f
+do
+	if [ ! -f $f ]
+	then
+		last_backup=$(ls ~/Backup/backup-*.tar.gz | tail -n 1)
+		tar -xpzf $last_backup -P ~/
+	fi
+done
+
+tar -zcvf ~/Backup/backup-`date +%Y-%m-%d`.tar.gz -P ~/*.config -P ~/*.conf > ~/Backup/backup_files
+
